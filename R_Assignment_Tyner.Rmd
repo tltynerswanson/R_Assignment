@@ -1,0 +1,19 @@
+---
+title: "R_Assignment_Tyner"
+author: "tltyner"
+date: "2023-03-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Download Files from UNIX Assignment
+
+```{r}
+fang_et_al <- read.delim("https://github.com/EEOB-BioData/BCB546_Spring2023/blob/e1428b7e87a2c86cf06a426f84784a7c2c95b410/assignments/UNIX_Assignment/fang_et_al_genotypes.txt", header = TRUE, sep = "\t")
+
+snp_position <- read.delim("https://github.com/EEOB-BioData/BCB546_Spring2023/blob/e1428b7e87a2c86cf06a426f84784a7c2c95b410/assignments/UNIX_Assignment/snp_position.txt", header = TRUE, sep = "\t")
+```
+

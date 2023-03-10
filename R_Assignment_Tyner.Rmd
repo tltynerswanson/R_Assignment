@@ -9,11 +9,50 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+#Load Proper Packages
+```{r}
+library(tidyverse)
+```
+
 #Download Files from UNIX Assignment
 
 ```{r}
-fang_et_al <- read.delim("https://github.com/EEOB-BioData/BCB546_Spring2023/blob/e1428b7e87a2c86cf06a426f84784a7c2c95b410/assignments/UNIX_Assignment/fang_et_al_genotypes.txt", header = TRUE, sep = "\t")
+fang_et_al <- read.delim("https://github.com/EEOB-BioData/BCB546_Spring2023/blob/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt?raw=true", header = TRUE, sep = "\t")
 
-snp_position <- read.delim("https://github.com/EEOB-BioData/BCB546_Spring2023/blob/e1428b7e87a2c86cf06a426f84784a7c2c95b410/assignments/UNIX_Assignment/snp_position.txt", header = TRUE, sep = "\t")
+
+snp_position <- read.delim("https://github.com/EEOB-BioData/BCB546_Spring2023/raw/main/assignments/UNIX_Assignment/snp_position.txt", header = TRUE, sep = "\t")
 ```
+
+#Data Inspection of Initial Files
+```{r}
+dim(fang_et_al)
+dim(snp_position)
+#dimensions include number of columns and number of lines
+```
+
+#Preparation for downstream analysis
+```{r}
+transposed_fang_et_al <- as.data.frame(t(fang_et_al))
+transposed_fang_et_al <- transposed_fang_et_al %>% rownames_to_column(var="Sample_ID")
+names(transposed_fang_et_al) <- transposed_fang_et_al[1,]
+transposed_fang_et_al <- transposed_fang_et_al[-1,]
+#should transpose fang_et_al and preserve proper names
+
+dim.data.frame(transposed_fang_et_al)
+#checks results of transposition
+
+snp_position_trimmed <- snp_position[,c(1,3,4)]
+#pulled three columns from snp_position
+
+view(transposed_fang_et_al)
+view(snp_position_trimmed)
+
+names(transposed_fang_et_al)[names(transposed_fang_et_al) == 'Sample_ID'] <- 'SNP_ID'
+#Renames Sample_ID in fang_et_al to SNP_ID for merging with snp_positions
+
+combined_snp_genotype_data <- inner_join(snp_position_trimmed,transposed_fang_et_al, by = "SNP_ID")
+
+view(combined_snp_genotype_data)
+```
+
 

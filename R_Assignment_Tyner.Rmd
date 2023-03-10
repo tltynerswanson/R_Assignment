@@ -270,3 +270,52 @@ teosinte_Ch10_decreasing_final[teosinte_Ch10_decreasing_final == "?/?"] <- "-/-"
 view(teosinte_Ch02_decreasing_final)
 ```
 
+#Writing tables for each file
+```{r}
+#Maize increasing and decreasing
+write.table(Maize_Ch01_increasing_final, file = "Maize_Ch01_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch02_increasing_final, file = "Maize_Ch02_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch03_increasing_final, file = "Maize_Ch03_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch04_increasing_final, file = "Maize_Ch04_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch05_increasing_final, file = "Maize_Ch05_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch06_increasing_final, file = "Maize_Ch06_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch07_increasing_final, file = "Maize_Ch07_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch08_increasing_final, file = "Maize_Ch08_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch09_increasing_final, file = "Maize_Ch09_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch10_increasing_final, file = "Maize_Ch10_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+
+write.table(Maize_Ch01_decreasing_final, file = "Maize_Ch01_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch02_decreasing_final, file = "Maize_Ch02_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch03_decreasing_final, file = "Maize_Ch03_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch04_decreasing_final, file = "Maize_Ch04_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch05_decreasing_final, file = "Maize_Ch05_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch06_decreasing_final, file = "Maize_Ch06_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch07_decreasing_final, file = "Maize_Ch07_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch08_decreasing_final, file = "Maize_Ch08_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch09_decreasing_final, file = "Maize_Ch09_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch10_decreasing_final, file = "Maize_Ch10_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+
+#Teosinte increasing and decreasing
+write.table(teosinte_Ch01_increasing_final, file = "teosinte_Ch01_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch02_increasing_final, file = "teosinte_Ch02_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch03_increasing_final, file = "teosinte_Ch03_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch04_increasing_final, file = "teosinte_Ch04_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch05_increasing_final, file = "teosinte_Ch05_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch06_increasing_final, file = "teosinte_Ch06_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch07_increasing_final, file = "teosinte_Ch07_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch08_increasing_final, file = "teosinte_Ch08_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch09_increasing_final, file = "teosinte_Ch09_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch10_increasing_final, file = "teosinte_Ch10_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+
+write.table(teosinte_Ch01_decreasing_final, file = "teosinte_Ch01_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch02_decreasing_final, file = "teosinte_Ch02_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch03_decreasing_final, file = "teosinte_Ch03_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch04_decreasing_final, file = "teosinte_Ch04_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch05_decreasing_final, file = "teosinte_Ch05_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch06_decreasing_final, file = "teosinte_Ch06_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch07_decreasing_final, file = "teosinte_Ch07_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch08_decreasing_final, file = "teosinte_Ch08_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch09_decreasing_final, file = "teosinte_Ch09_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch10_decreasing_final, file = "teosinte_Ch10_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+```
+

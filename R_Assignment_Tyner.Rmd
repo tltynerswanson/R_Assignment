@@ -30,29 +30,243 @@ dim(snp_position)
 #dimensions include number of columns and number of lines
 ```
 
-#Preparation for downstream analysis
+#Extract Maize and Teosinte Data
 ```{r}
-transposed_fang_et_al <- as.data.frame(t(fang_et_al))
-transposed_fang_et_al <- transposed_fang_et_al %>% rownames_to_column(var="Sample_ID")
-names(transposed_fang_et_al) <- transposed_fang_et_al[1,]
-transposed_fang_et_al <- transposed_fang_et_al[-1,]
-#should transpose fang_et_al and preserve proper names
+maize_genotypes <- fang_et_al %>% filter(grepl("ZMMIL|ZMMLR|ZMMMR", Group))
+view(maize_genotypes)
+teosinte_genotypes <- fang_et_al %>% filter(grepl("ZMPBA|ZMPIL|ZMPJA", Group))
+view(teosinte_genotypes)
 
-dim.data.frame(transposed_fang_et_al)
-#checks results of transposition
-
-snp_position_trimmed <- snp_position[,c(1,3,4)]
-#pulled three columns from snp_position
-
-view(transposed_fang_et_al)
-view(snp_position_trimmed)
-
-names(transposed_fang_et_al)[names(transposed_fang_et_al) == 'Sample_ID'] <- 'SNP_ID'
-#Renames Sample_ID in fang_et_al to SNP_ID for merging with snp_positions
-
-combined_snp_genotype_data <- inner_join(snp_position_trimmed,transposed_fang_et_al, by = "SNP_ID")
-
-view(combined_snp_genotype_data)
 ```
 
+
+#Merging initial genotype/snp files
+```{r}
+snp_position_trimmed <- snp_position[,c(1,3,4)]
+view(snp_position_trimmed)
+#pulled three columns from snp_position
+
+transposed_maize <- as.data.frame(t(maize_genotypes))
+transposed_maize <- transposed_maize %>% rownames_to_column(var="Sample_ID")
+names(transposed_maize) <- transposed_maize[1,]
+transposed_maize <- transposed_maize[-1,]
+view(transposed_maize)
+#should transpose maize_genotypes and preserve proper names
+
+dim.data.frame(transposed_maize)
+#checks results of transposition
+
+names(transposed_maize)[names(transposed_maize) == 'Sample_ID'] <- 'SNP_ID'
+#Renames Sample_ID in transposed_maize to SNP_ID for merging with snp_positions
+
+combined_snp_genotype_data_maize <- full_join(snp_position_trimmed,transposed_maize, by = "SNP_ID")
+view(combined_snp_genotype_data_maize)
+#combined snp_position_trimmed and transposed_maize by the shared column
+
+transposed_teosinte <- as.data.frame(t(teosinte_genotypes))
+transposed_teosinte <- transposed_teosinte %>% rownames_to_column(var="Sample_ID")
+names(transposed_teosinte) <- transposed_teosinte[1,]
+transposed_teosinte <- transposed_teosinte[-1,]
+view(transposed_teosinte)
+#should transpose teosinte_genotypes and preserve proper names
+
+dim.data.frame(transposed_teosinte)
+#checks results of transposition
+
+names(transposed_teosinte)[names(transposed_teosinte) == 'Sample_ID'] <- 'SNP_ID'
+#Renames Sample_ID in transposed_teosinte to SNP_ID for merging with snp_positions
+
+combined_snp_genotype_data_teosinte <- full_join(snp_position_trimmed,transposed_teosinte, by = "SNP_ID")
+view(combined_snp_genotype_data_teosinte)
+#combined snp_position_trimmed and transposed_teosinte by the shared column
+```
+
+#Maize Preparation
+```{r}
+#Separating by Chromosome
+Maize_Chromosome_1 <- combined_snp_genotype_data_maize %>% filter(grepl("1$", Chromosome))
+view(Maize_Chromosome_1)
+
+Maize_Chromosome_2 <- combined_snp_genotype_data_maize %>% filter(grepl("2$", Chromosome))
+
+Maize_Chromosome_3 <- combined_snp_genotype_data_maize %>% filter(grepl("3$", Chromosome))
+
+Maize_Chromosome_4 <- combined_snp_genotype_data_maize %>% filter(grepl("4$", Chromosome))
+
+Maize_Chromosome_5 <- combined_snp_genotype_data_maize %>% filter(grepl("5$", Chromosome))
+
+Maize_Chromosome_6 <- combined_snp_genotype_data_maize %>% filter(grepl("6$", Chromosome))
+
+Maize_Chromosome_7 <- combined_snp_genotype_data_maize %>% filter(grepl("7$", Chromosome))
+
+Maize_Chromosome_8 <- combined_snp_genotype_data_maize %>% filter(grepl("8$", Chromosome))
+
+Maize_Chromosome_9 <- combined_snp_genotype_data_maize %>% filter(grepl("9$", Chromosome))
+
+Maize_Chromosome_10 <- combined_snp_genotype_data_maize %>% filter(grepl("10$", Chromosome))
+
+#Ordering by Position (increasing), leaving '?' as missing data
+Maize_Ch01_increasing_final <- Maize_Chromosome_1[order(as.numeric(Maize_Chromosome_1$Position)),]
+view(Maize_Ch01_increasing_final)
+
+Maize_Ch02_increasing_final <- Maize_Chromosome_2[order(as.numeric(Maize_Chromosome_2$Position)),]
+
+Maize_Ch03_increasing_final <- Maize_Chromosome_3[order(as.numeric(Maize_Chromosome_3$Position)),]
+
+Maize_Ch04_increasing_final <- Maize_Chromosome_4[order(as.numeric(Maize_Chromosome_4$Position)),]
+
+Maize_Ch05_increasing_final <- Maize_Chromosome_5[order(as.numeric(Maize_Chromosome_5$Position)),]
+
+Maize_Ch06_increasing_final <- Maize_Chromosome_6[order(as.numeric(Maize_Chromosome_6$Position)),]
+
+Maize_Ch07_increasing_final <- Maize_Chromosome_7[order(as.numeric(Maize_Chromosome_7$Position)),]
+
+Maize_Ch08_increasing_final <- Maize_Chromosome_8[order(as.numeric(Maize_Chromosome_8$Position)),]
+
+Maize_Ch09_increasing_final <- Maize_Chromosome_9[order(as.numeric(Maize_Chromosome_9$Position)),]
+
+Maize_Ch10_increasing_final <- Maize_Chromosome_10[order(as.numeric(Maize_Chromosome_10$Position)),]
+
+#Order position by decreasing values
+
+Maize_Ch01_decreasing_final <- Maize_Chromosome_1[order(as.numeric(Maize_Chromosome_1$Position), decreasing =TRUE),]
+view(Maize_Ch01_decreasing)
+
+Maize_Ch02_decreasing_final <- Maize_Chromosome_2[order(as.numeric(Maize_Chromosome_2$Position), decreasing =TRUE),]
+
+Maize_Ch03_decreasing_final <- Maize_Chromosome_3[order(as.numeric(Maize_Chromosome_3$Position), decreasing =TRUE),]
+
+Maize_Ch04_decreasing_final <- Maize_Chromosome_4[order(as.numeric(Maize_Chromosome_4$Position), decreasing =TRUE),]
+
+Maize_Ch05_decreasing_final <- Maize_Chromosome_5[order(as.numeric(Maize_Chromosome_5$Position), decreasing =TRUE),]
+
+Maize_Ch06_decreasing_final <- Maize_Chromosome_6[order(as.numeric(Maize_Chromosome_6$Position), decreasing =TRUE),]
+
+Maize_Ch07_decreasing_final <- Maize_Chromosome_7[order(as.numeric(Maize_Chromosome_7$Position), decreasing =TRUE),]
+
+Maize_Ch08_decreasing_final <- Maize_Chromosome_8[order(as.numeric(Maize_Chromosome_8$Position), decreasing =TRUE),]
+
+Maize_Ch09_decreasing_final <- Maize_Chromosome_9[order(as.numeric(Maize_Chromosome_9$Position), decreasing =TRUE),]
+
+Maize_Ch10_decreasing_final <- Maize_Chromosome_10[order(as.numeric(Maize_Chromosome_10$Position), decreasing =TRUE),]
+
+#Replacing ? with -
+
+Maize_Ch01_decreasing_final[Maize_Ch01_decreasing_final == "?/?"] <- "-/-"
+view(Maize_Ch01_decreasing_final)
+
+Maize_Ch02_decreasing_final[Maize_Ch02_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch03_decreasing_final[Maize_Ch03_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch04_decreasing_final[Maize_Ch04_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch05_decreasing_final[Maize_Ch05_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch06_decreasing_final[Maize_Ch06_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch07_decreasing_final[Maize_Ch07_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch08_decreasing_final[Maize_Ch08_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch09_decreasing_final[Maize_Ch09_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch10_decreasing_final[Maize_Ch10_decreasing_final == "?/?"] <- "-/-"
+```
+
+#Teosinte Preparation
+
+```{r}
+#Separating by Chromosome
+teosinte_Chromosome_1 <- combined_snp_genotype_data_teosinte %>% filter(grepl("1$", Chromosome))
+view(teosinte_Chromosome_1)
+
+teosinte_Chromosome_2 <- combined_snp_genotype_data_teosinte %>% filter(grepl("2$", Chromosome))
+
+teosinte_Chromosome_3 <- combined_snp_genotype_data_teosinte %>% filter(grepl("3$", Chromosome))
+
+teosinte_Chromosome_4 <- combined_snp_genotype_data_teosinte %>% filter(grepl("4$", Chromosome))
+
+teosinte_Chromosome_5 <- combined_snp_genotype_data_teosinte %>% filter(grepl("5$", Chromosome))
+
+teosinte_Chromosome_6 <- combined_snp_genotype_data_teosinte %>% filter(grepl("6$", Chromosome))
+
+teosinte_Chromosome_7 <- combined_snp_genotype_data_teosinte %>% filter(grepl("7$", Chromosome))
+
+teosinte_Chromosome_8 <- combined_snp_genotype_data_teosinte %>% filter(grepl("8$", Chromosome))
+
+teosinte_Chromosome_9 <- combined_snp_genotype_data_teosinte %>% filter(grepl("9$", Chromosome))
+
+teosinte_Chromosome_10 <- combined_snp_genotype_data_teosinte %>% filter(grepl("10$", Chromosome))
+
+#Ordering by Position (increasing), leaving '?' as missing data
+teosinte_Ch01_increasing_final <- teosinte_Chromosome_1[order(as.numeric(teosinte_Chromosome_1$Position)),]
+view(teosinte_Ch01_increasing_final)
+
+teosinte_Ch02_increasing_final <- teosinte_Chromosome_2[order(as.numeric(teosinte_Chromosome_2$Position)),]
+
+teosinte_Ch03_increasing_final <- teosinte_Chromosome_3[order(as.numeric(teosinte_Chromosome_3$Position)),]
+
+teosinte_Ch04_increasing_final <- teosinte_Chromosome_4[order(as.numeric(teosinte_Chromosome_4$Position)),]
+
+teosinte_Ch05_increasing_final <- teosinte_Chromosome_5[order(as.numeric(teosinte_Chromosome_5$Position)),]
+
+teosinte_Ch06_increasing_final <- teosinte_Chromosome_6[order(as.numeric(teosinte_Chromosome_6$Position)),]
+
+teosinte_Ch07_increasing_final <- teosinte_Chromosome_7[order(as.numeric(teosinte_Chromosome_7$Position)),]
+
+teosinte_Ch08_increasing_final <- teosinte_Chromosome_8[order(as.numeric(teosinte_Chromosome_8$Position)),]
+
+teosinte_Ch09_increasing_final <- teosinte_Chromosome_9[order(as.numeric(teosinte_Chromosome_9$Position)),]
+
+teosinte_Ch10_increasing_final <- teosinte_Chromosome_10[order(as.numeric(teosinte_Chromosome_10$Position)),]
+
+#Order position by decreasing values
+
+teosinte_Ch01_decreasing_final <- teosinte_Chromosome_1[order(as.numeric(teosinte_Chromosome_1$Position), decreasing =TRUE),]
+view(teosinte_Ch01_decreasing_final)
+
+teosinte_Ch02_decreasing_final <- teosinte_Chromosome_2[order(as.numeric(teosinte_Chromosome_2$Position), decreasing =TRUE),]
+
+teosinte_Ch03_decreasing_final <- teosinte_Chromosome_3[order(as.numeric(teosinte_Chromosome_3$Position), decreasing =TRUE),]
+
+teosinte_Ch04_decreasing_final <- teosinte_Chromosome_4[order(as.numeric(teosinte_Chromosome_4$Position), decreasing =TRUE),]
+
+teosinte_Ch05_decreasing_final <- teosinte_Chromosome_5[order(as.numeric(teosinte_Chromosome_5$Position), decreasing =TRUE),]
+
+teosinte_Ch06_decreasing_final <- teosinte_Chromosome_6[order(as.numeric(teosinte_Chromosome_6$Position), decreasing =TRUE),]
+
+teosinte_Ch07_decreasing_final <- teosinte_Chromosome_7[order(as.numeric(teosinte_Chromosome_7$Position), decreasing =TRUE),]
+
+teosinte_Ch08_decreasing_final <- teosinte_Chromosome_8[order(as.numeric(teosinte_Chromosome_8$Position), decreasing =TRUE),]
+
+teosinte_Ch09_decreasing_final <- teosinte_Chromosome_9[order(as.numeric(teosinte_Chromosome_9$Position), decreasing =TRUE),]
+
+teosinte_Ch10_decreasing_final <- teosinte_Chromosome_10[order(as.numeric(teosinte_Chromosome_10$Position), decreasing =TRUE),]
+
+#Replacing ? with -
+
+teosinte_Ch01_decreasing_final[teosinte_Ch01_decreasing_final == "?/?"] <- "-/-"
+view(teosinte_Ch01_decreasing_final)
+
+teosinte_Ch02_decreasing_final[teosinte_Ch02_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch03_decreasing_final[teosinte_Ch03_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch04_decreasing_final[teosinte_Ch04_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch05_decreasing_final[teosinte_Ch05_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch06_decreasing_final[teosinte_Ch06_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch07_decreasing_final[teosinte_Ch07_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch08_decreasing_final[teosinte_Ch08_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch09_decreasing_final[teosinte_Ch09_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch10_decreasing_final[teosinte_Ch10_decreasing_final == "?/?"] <- "-/-"
+
+view(teosinte_Ch02_decreasing_final)
+```
 

@@ -331,9 +331,21 @@ ggplot(data= combined_pivot_table) + geom_bar(mapping = aes(x = Chromosome, fill
 ```{r}
 #Mapping missing genetic data per chromosome and comparing between species
 combined_pivot_table_missing <- combined_pivot_table %>% filter(grepl("missing", Genotype_Zygosity))
-combined_pivot_table_missing <- combined_pivot_table_missing %>% filter(grepl("1|2|3|4|5|6|7|8|9|10", Chromosome))
 
-ggplot(data= combined_pivot_table_missing) + geom_bar(mapping = aes(x = Chromosome, fill=species), position = "dodge")
+ggplot(data= combined_pivot_table_missing) + geom_bar(mapping = aes(x = Chromosome, fill=species), position = "dodge") + ggtitle("Comparison of Missing Data")
+ggplot(data = combined_pivot_table_missing) + geom_density(mapping = aes(x=Chromosome, fill=species), alpha=0.4) + ggtitle("Comparison of Missing Data")
+
+#Mapping homozygous genetic data per chromosome and comparing between species
+combined_pivot_table_homozygous <- combined_pivot_table %>% filter(grepl("homozygous", Genotype_Zygosity))
+
+ggplot(data= combined_pivot_table_homozygous) + geom_bar(mapping = aes(x = Chromosome, fill=species), position = "dodge") + ggtitle("Comparison of Homozygous Data")
+ggplot(data = combined_pivot_table_homozygous) + geom_density(mapping = aes(x=Chromosome, fill=species), alpha=0.4) + ggtitle("Comparison of Homozygous Data")
+
+#Mapping heterozygous genetic data per chromosome and comparing between species
+combined_pivot_table_heterozygous <- combined_pivot_table %>% filter(grepl("heterozygous", Genotype_Zygosity))
+
+ggplot(data= combined_pivot_table_heterozygous) + geom_bar(mapping = aes(x = Chromosome, fill=species), position = "dodge") + ggtitle("Comparison of Heterozygous Data")
+ggplot(data = combined_pivot_table_heterozygous) + geom_density(mapping = aes(x=Chromosome, fill=species), alpha=0.4) + ggtitle("Comparison of Heterozygous Data")
 ```
 
 

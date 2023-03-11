@@ -33,9 +33,7 @@ dim(snp_position)
 #Extract Maize and Teosinte Data
 ```{r}
 maize_genotypes <- fang_et_al %>% filter(grepl("ZMMIL|ZMMLR|ZMMMR", Group))
-view(maize_genotypes)
 teosinte_genotypes <- fang_et_al %>% filter(grepl("ZMPBA|ZMPIL|ZMPJA", Group))
-view(teosinte_genotypes)
 
 ```
 
@@ -43,14 +41,12 @@ view(teosinte_genotypes)
 #Merging initial genotype/snp files
 ```{r}
 snp_position_trimmed <- snp_position[,c(1,3,4)]
-view(snp_position_trimmed)
 #pulled three columns from snp_position
 
 transposed_maize <- as.data.frame(t(maize_genotypes))
 transposed_maize <- transposed_maize %>% rownames_to_column(var="Sample_ID")
 names(transposed_maize) <- transposed_maize[1,]
 transposed_maize <- transposed_maize[-1,]
-view(transposed_maize)
 #should transpose maize_genotypes and preserve proper names
 
 dim.data.frame(transposed_maize)
@@ -59,15 +55,13 @@ dim.data.frame(transposed_maize)
 names(transposed_maize)[names(transposed_maize) == 'Sample_ID'] <- 'SNP_ID'
 #Renames Sample_ID in transposed_maize to SNP_ID for merging with snp_positions
 
-combined_snp_genotype_data_maize <- full_join(snp_position_trimmed,transposed_maize, by = "SNP_ID")
-view(combined_snp_genotype_data_maize)
+combined_snp_genotype_data_maize <- inner_join(snp_position_trimmed,transposed_maize, by = "SNP_ID")
 #combined snp_position_trimmed and transposed_maize by the shared column
 
 transposed_teosinte <- as.data.frame(t(teosinte_genotypes))
 transposed_teosinte <- transposed_teosinte %>% rownames_to_column(var="Sample_ID")
 names(transposed_teosinte) <- transposed_teosinte[1,]
 transposed_teosinte <- transposed_teosinte[-1,]
-view(transposed_teosinte)
 #should transpose teosinte_genotypes and preserve proper names
 
 dim.data.frame(transposed_teosinte)
@@ -76,8 +70,7 @@ dim.data.frame(transposed_teosinte)
 names(transposed_teosinte)[names(transposed_teosinte) == 'Sample_ID'] <- 'SNP_ID'
 #Renames Sample_ID in transposed_teosinte to SNP_ID for merging with snp_positions
 
-combined_snp_genotype_data_teosinte <- full_join(snp_position_trimmed,transposed_teosinte, by = "SNP_ID")
-view(combined_snp_genotype_data_teosinte)
+combined_snp_genotype_data_teosinte <- inner_join(snp_position_trimmed,transposed_teosinte, by = "SNP_ID")
 #combined snp_position_trimmed and transposed_teosinte by the shared column
 ```
 
@@ -85,7 +78,6 @@ view(combined_snp_genotype_data_teosinte)
 ```{r}
 #Separating by Chromosome
 Maize_Chromosome_1 <- combined_snp_genotype_data_maize %>% filter(grepl("1$", Chromosome))
-view(Maize_Chromosome_1)
 
 Maize_Chromosome_2 <- combined_snp_genotype_data_maize %>% filter(grepl("2$", Chromosome))
 
@@ -107,7 +99,6 @@ Maize_Chromosome_10 <- combined_snp_genotype_data_maize %>% filter(grepl("10$", 
 
 #Ordering by Position (increasing), leaving '?' as missing data
 Maize_Ch01_increasing_final <- Maize_Chromosome_1[order(as.numeric(Maize_Chromosome_1$Position)),]
-view(Maize_Ch01_increasing_final)
 
 Maize_Ch02_increasing_final <- Maize_Chromosome_2[order(as.numeric(Maize_Chromosome_2$Position)),]
 
@@ -130,7 +121,6 @@ Maize_Ch10_increasing_final <- Maize_Chromosome_10[order(as.numeric(Maize_Chromo
 #Order position by decreasing values
 
 Maize_Ch01_decreasing_final <- Maize_Chromosome_1[order(as.numeric(Maize_Chromosome_1$Position), decreasing =TRUE),]
-view(Maize_Ch01_decreasing)
 
 Maize_Ch02_decreasing_final <- Maize_Chromosome_2[order(as.numeric(Maize_Chromosome_2$Position), decreasing =TRUE),]
 
@@ -153,7 +143,6 @@ Maize_Ch10_decreasing_final <- Maize_Chromosome_10[order(as.numeric(Maize_Chromo
 #Replacing ? with -
 
 Maize_Ch01_decreasing_final[Maize_Ch01_decreasing_final == "?/?"] <- "-/-"
-view(Maize_Ch01_decreasing_final)
 
 Maize_Ch02_decreasing_final[Maize_Ch02_decreasing_final == "?/?"] <- "-/-"
 
@@ -179,7 +168,6 @@ Maize_Ch10_decreasing_final[Maize_Ch10_decreasing_final == "?/?"] <- "-/-"
 ```{r}
 #Separating by Chromosome
 teosinte_Chromosome_1 <- combined_snp_genotype_data_teosinte %>% filter(grepl("1$", Chromosome))
-view(teosinte_Chromosome_1)
 
 teosinte_Chromosome_2 <- combined_snp_genotype_data_teosinte %>% filter(grepl("2$", Chromosome))
 
@@ -201,7 +189,6 @@ teosinte_Chromosome_10 <- combined_snp_genotype_data_teosinte %>% filter(grepl("
 
 #Ordering by Position (increasing), leaving '?' as missing data
 teosinte_Ch01_increasing_final <- teosinte_Chromosome_1[order(as.numeric(teosinte_Chromosome_1$Position)),]
-view(teosinte_Ch01_increasing_final)
 
 teosinte_Ch02_increasing_final <- teosinte_Chromosome_2[order(as.numeric(teosinte_Chromosome_2$Position)),]
 
@@ -224,7 +211,6 @@ teosinte_Ch10_increasing_final <- teosinte_Chromosome_10[order(as.numeric(teosin
 #Order position by decreasing values
 
 teosinte_Ch01_decreasing_final <- teosinte_Chromosome_1[order(as.numeric(teosinte_Chromosome_1$Position), decreasing =TRUE),]
-view(teosinte_Ch01_decreasing_final)
 
 teosinte_Ch02_decreasing_final <- teosinte_Chromosome_2[order(as.numeric(teosinte_Chromosome_2$Position), decreasing =TRUE),]
 
@@ -247,7 +233,6 @@ teosinte_Ch10_decreasing_final <- teosinte_Chromosome_10[order(as.numeric(teosin
 #Replacing ? with -
 
 teosinte_Ch01_decreasing_final[teosinte_Ch01_decreasing_final == "?/?"] <- "-/-"
-view(teosinte_Ch01_decreasing_final)
 
 teosinte_Ch02_decreasing_final[teosinte_Ch02_decreasing_final == "?/?"] <- "-/-"
 
@@ -266,8 +251,6 @@ teosinte_Ch08_decreasing_final[teosinte_Ch08_decreasing_final == "?/?"] <- "-/-"
 teosinte_Ch09_decreasing_final[teosinte_Ch09_decreasing_final == "?/?"] <- "-/-"
 
 teosinte_Ch10_decreasing_final[teosinte_Ch10_decreasing_final == "?/?"] <- "-/-"
-
-view(teosinte_Ch02_decreasing_final)
 ```
 
 #Writing tables for each file
@@ -318,4 +301,40 @@ write.table(teosinte_Ch08_decreasing_final, file = "teosinte_Ch08_decreasing_fin
 write.table(teosinte_Ch09_decreasing_final, file = "teosinte_Ch09_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 write.table(teosinte_Ch10_decreasing_final, file = "teosinte_Ch10_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 ```
+
+#PART II, VISUALIZATION
+
+#SNPs per chromosome
+```{r}
+ggplot(combined_snp_genotype_data_maize, aes(x=Position, y=Chromosome)) + geom_point(col = "gold")
+
+ggplot(combined_snp_genotype_data_teosinte, aes(x=Position, y=Chromosome)) + geom_point(col = "darkgreen")
+#The graphs for Teosinte and Maize are the same, meaning that SNP position is unaffected by species
+```
+
+#Missing data and amount of heterozygosity
+```{r}
+pivot_maize <- pivot_longer(combined_snp_genotype_data_maize, cols = !1:3, names_to = "Genes")
+pivot_maize$Genotype_Zygosity <- case_when(pivot_maize$value == "A/A" ~ "homozygous", pivot_maize$value == "C/C" ~ "homozygous", pivot_maize$value == "G/G" ~ "homozygous", pivot_maize$value == "T/T" ~ "homozygous", pivot_maize$value == "?/?" ~ "missing", .default = "heterozygous" )
+
+pivot_teosinte <- pivot_longer(combined_snp_genotype_data_teosinte, cols = !1:3, names_to = "Genes")
+pivot_teosinte$Genotype_Zygosity <- case_when(pivot_teosinte$value == "A/A" ~ "homozygous", pivot_teosinte$value == "C/C" ~ "homozygous", pivot_teosinte$value == "G/G" ~ "homozygous", pivot_teosinte$value == "T/T" ~ "homozygous", pivot_teosinte$value == "?/?" ~ "missing", .default = "heterozygous" )
+
+pivot_maize$species <- "maize"
+pivot_teosinte$species <- "teosinte"
+combined_pivot_table <- rbind(pivot_maize, pivot_teosinte)
+
+ggplot(data= combined_pivot_table) + geom_bar(mapping = aes(x = Chromosome, fill=Genotype_Zygosity), position = "fill") + facet_wrap(~species)
+```
+
+#Choose your own adventure
+```{r}
+#Mapping missing genetic data per chromosome and comparing between species
+combined_pivot_table_missing <- combined_pivot_table %>% filter(grepl("missing", Genotype_Zygosity))
+combined_pivot_table_missing <- combined_pivot_table_missing %>% filter(grepl("1|2|3|4|5|6|7|8|9|10", Chromosome))
+
+ggplot(data= combined_pivot_table_missing) + geom_bar(mapping = aes(x = Chromosome, fill=species), position = "dodge")
+```
+
+
 

@@ -1,0 +1,362 @@
+---
+title: "R_Assignment_Tyner"
+author: "tltyner"
+date: "2023-03-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Load Proper Packages
+```{r}
+library(tidyverse)
+```
+
+#Download Files from UNIX Assignment
+
+```{r}
+fang_et_al <- read.delim("https://github.com/EEOB-BioData/BCB546_Spring2023/blob/main/assignments/UNIX_Assignment/fang_et_al_genotypes.txt?raw=true", header = TRUE, sep = "\t")
+
+
+snp_position <- read.delim("https://github.com/EEOB-BioData/BCB546_Spring2023/raw/main/assignments/UNIX_Assignment/snp_position.txt", header = TRUE, sep = "\t")
+```
+
+#Data Inspection of Initial Files
+```{r}
+dim(fang_et_al)
+dim(snp_position)
+#dimensions include number of columns and number of lines
+```
+
+you could probably add more to the inspection section, and a bullet list summarizing the important details. file size, type of variables, structure of file, etc. try using the str() function.
+
+#Extract Maize and Teosinte Data
+```{r}
+maize_genotypes <- fang_et_al %>% filter(grepl("ZMMIL|ZMMLR|ZMMMR", Group))
+teosinte_genotypes <- fang_et_al %>% filter(grepl("ZMPBA|ZMPIL|ZMPJA", Group))
+
+```
+
+
+#Merging initial genotype/snp files
+```{r}
+snp_position_trimmed <- snp_position[,c(1,3,4)]
+#pulled three columns from snp_position
+
+transposed_maize <- as.data.frame(t(maize_genotypes))
+transposed_maize <- transposed_maize %>% rownames_to_column(var="Sample_ID")
+names(transposed_maize) <- transposed_maize[1,]
+transposed_maize <- transposed_maize[-1,]
+#should transpose maize_genotypes and preserve proper names
+
+dim.data.frame(transposed_maize)
+#checks results of transposition
+
+names(transposed_maize)[names(transposed_maize) == 'Sample_ID'] <- 'SNP_ID'
+#Renames Sample_ID in transposed_maize to SNP_ID for merging with snp_positions
+
+combined_snp_genotype_data_maize <- inner_join(snp_position_trimmed,transposed_maize, by = "SNP_ID")
+#combined snp_position_trimmed and transposed_maize by the shared column
+
+transposed_teosinte <- as.data.frame(t(teosinte_genotypes))
+transposed_teosinte <- transposed_teosinte %>% rownames_to_column(var="Sample_ID")
+names(transposed_teosinte) <- transposed_teosinte[1,]
+transposed_teosinte <- transposed_teosinte[-1,]
+#should transpose teosinte_genotypes and preserve proper names
+
+dim.data.frame(transposed_teosinte)
+#checks results of transposition
+
+names(transposed_teosinte)[names(transposed_teosinte) == 'Sample_ID'] <- 'SNP_ID'
+#Renames Sample_ID in transposed_teosinte to SNP_ID for merging with snp_positions
+
+combined_snp_genotype_data_teosinte <- inner_join(snp_position_trimmed,transposed_teosinte, by = "SNP_ID")
+#combined snp_position_trimmed and transposed_teosinte by the shared column
+```
+I like that you have steps to check and make sure that the results you are getting are as expected 
+
+#Maize Preparation
+```{r}
+#Separating by Chromosome
+Maize_Chromosome_1 <- combined_snp_genotype_data_maize %>% filter(grepl("1$", Chromosome))
+
+Maize_Chromosome_2 <- combined_snp_genotype_data_maize %>% filter(grepl("2$", Chromosome))
+
+Maize_Chromosome_3 <- combined_snp_genotype_data_maize %>% filter(grepl("3$", Chromosome))
+
+Maize_Chromosome_4 <- combined_snp_genotype_data_maize %>% filter(grepl("4$", Chromosome))
+
+Maize_Chromosome_5 <- combined_snp_genotype_data_maize %>% filter(grepl("5$", Chromosome))
+
+Maize_Chromosome_6 <- combined_snp_genotype_data_maize %>% filter(grepl("6$", Chromosome))
+
+Maize_Chromosome_7 <- combined_snp_genotype_data_maize %>% filter(grepl("7$", Chromosome))
+
+Maize_Chromosome_8 <- combined_snp_genotype_data_maize %>% filter(grepl("8$", Chromosome))
+
+Maize_Chromosome_9 <- combined_snp_genotype_data_maize %>% filter(grepl("9$", Chromosome))
+
+Maize_Chromosome_10 <- combined_snp_genotype_data_maize %>% filter(grepl("10$", Chromosome))
+
+#Ordering by Position (increasing), leaving '?' as missing data
+Maize_Ch01_increasing_final <- Maize_Chromosome_1[order(as.numeric(Maize_Chromosome_1$Position)),]
+
+Maize_Ch02_increasing_final <- Maize_Chromosome_2[order(as.numeric(Maize_Chromosome_2$Position)),]
+
+Maize_Ch03_increasing_final <- Maize_Chromosome_3[order(as.numeric(Maize_Chromosome_3$Position)),]
+
+Maize_Ch04_increasing_final <- Maize_Chromosome_4[order(as.numeric(Maize_Chromosome_4$Position)),]
+
+Maize_Ch05_increasing_final <- Maize_Chromosome_5[order(as.numeric(Maize_Chromosome_5$Position)),]
+
+Maize_Ch06_increasing_final <- Maize_Chromosome_6[order(as.numeric(Maize_Chromosome_6$Position)),]
+
+Maize_Ch07_increasing_final <- Maize_Chromosome_7[order(as.numeric(Maize_Chromosome_7$Position)),]
+
+Maize_Ch08_increasing_final <- Maize_Chromosome_8[order(as.numeric(Maize_Chromosome_8$Position)),]
+
+Maize_Ch09_increasing_final <- Maize_Chromosome_9[order(as.numeric(Maize_Chromosome_9$Position)),]
+
+Maize_Ch10_increasing_final <- Maize_Chromosome_10[order(as.numeric(Maize_Chromosome_10$Position)),]
+
+#Order position by decreasing values
+
+Maize_Ch01_decreasing_final <- Maize_Chromosome_1[order(as.numeric(Maize_Chromosome_1$Position), decreasing =TRUE),]
+
+Maize_Ch02_decreasing_final <- Maize_Chromosome_2[order(as.numeric(Maize_Chromosome_2$Position), decreasing =TRUE),]
+
+Maize_Ch03_decreasing_final <- Maize_Chromosome_3[order(as.numeric(Maize_Chromosome_3$Position), decreasing =TRUE),]
+
+Maize_Ch04_decreasing_final <- Maize_Chromosome_4[order(as.numeric(Maize_Chromosome_4$Position), decreasing =TRUE),]
+
+Maize_Ch05_decreasing_final <- Maize_Chromosome_5[order(as.numeric(Maize_Chromosome_5$Position), decreasing =TRUE),]
+
+Maize_Ch06_decreasing_final <- Maize_Chromosome_6[order(as.numeric(Maize_Chromosome_6$Position), decreasing =TRUE),]
+
+Maize_Ch07_decreasing_final <- Maize_Chromosome_7[order(as.numeric(Maize_Chromosome_7$Position), decreasing =TRUE),]
+
+Maize_Ch08_decreasing_final <- Maize_Chromosome_8[order(as.numeric(Maize_Chromosome_8$Position), decreasing =TRUE),]
+
+Maize_Ch09_decreasing_final <- Maize_Chromosome_9[order(as.numeric(Maize_Chromosome_9$Position), decreasing =TRUE),]
+
+Maize_Ch10_decreasing_final <- Maize_Chromosome_10[order(as.numeric(Maize_Chromosome_10$Position), decreasing =TRUE),]
+
+#Replacing ? with -
+
+Maize_Ch01_decreasing_final[Maize_Ch01_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch02_decreasing_final[Maize_Ch02_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch03_decreasing_final[Maize_Ch03_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch04_decreasing_final[Maize_Ch04_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch05_decreasing_final[Maize_Ch05_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch06_decreasing_final[Maize_Ch06_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch07_decreasing_final[Maize_Ch07_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch08_decreasing_final[Maize_Ch08_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch09_decreasing_final[Maize_Ch09_decreasing_final == "?/?"] <- "-/-"
+
+Maize_Ch10_decreasing_final[Maize_Ch10_decreasing_final == "?/?"] <- "-/-"
+```
+
+#Teosinte Preparation
+
+```{r}
+#Separating by Chromosome
+teosinte_Chromosome_1 <- combined_snp_genotype_data_teosinte %>% filter(grepl("1$", Chromosome))
+
+teosinte_Chromosome_2 <- combined_snp_genotype_data_teosinte %>% filter(grepl("2$", Chromosome))
+
+teosinte_Chromosome_3 <- combined_snp_genotype_data_teosinte %>% filter(grepl("3$", Chromosome))
+
+teosinte_Chromosome_4 <- combined_snp_genotype_data_teosinte %>% filter(grepl("4$", Chromosome))
+
+teosinte_Chromosome_5 <- combined_snp_genotype_data_teosinte %>% filter(grepl("5$", Chromosome))
+
+teosinte_Chromosome_6 <- combined_snp_genotype_data_teosinte %>% filter(grepl("6$", Chromosome))
+
+teosinte_Chromosome_7 <- combined_snp_genotype_data_teosinte %>% filter(grepl("7$", Chromosome))
+
+teosinte_Chromosome_8 <- combined_snp_genotype_data_teosinte %>% filter(grepl("8$", Chromosome))
+
+teosinte_Chromosome_9 <- combined_snp_genotype_data_teosinte %>% filter(grepl("9$", Chromosome))
+
+teosinte_Chromosome_10 <- combined_snp_genotype_data_teosinte %>% filter(grepl("10$", Chromosome))
+
+#Ordering by Position (increasing), leaving '?' as missing data
+teosinte_Ch01_increasing_final <- teosinte_Chromosome_1[order(as.numeric(teosinte_Chromosome_1$Position)),]
+
+teosinte_Ch02_increasing_final <- teosinte_Chromosome_2[order(as.numeric(teosinte_Chromosome_2$Position)),]
+
+teosinte_Ch03_increasing_final <- teosinte_Chromosome_3[order(as.numeric(teosinte_Chromosome_3$Position)),]
+
+teosinte_Ch04_increasing_final <- teosinte_Chromosome_4[order(as.numeric(teosinte_Chromosome_4$Position)),]
+
+teosinte_Ch05_increasing_final <- teosinte_Chromosome_5[order(as.numeric(teosinte_Chromosome_5$Position)),]
+
+teosinte_Ch06_increasing_final <- teosinte_Chromosome_6[order(as.numeric(teosinte_Chromosome_6$Position)),]
+
+teosinte_Ch07_increasing_final <- teosinte_Chromosome_7[order(as.numeric(teosinte_Chromosome_7$Position)),]
+
+teosinte_Ch08_increasing_final <- teosinte_Chromosome_8[order(as.numeric(teosinte_Chromosome_8$Position)),]
+
+teosinte_Ch09_increasing_final <- teosinte_Chromosome_9[order(as.numeric(teosinte_Chromosome_9$Position)),]
+
+teosinte_Ch10_increasing_final <- teosinte_Chromosome_10[order(as.numeric(teosinte_Chromosome_10$Position)),]
+
+#Order position by decreasing values
+
+teosinte_Ch01_decreasing_final <- teosinte_Chromosome_1[order(as.numeric(teosinte_Chromosome_1$Position), decreasing =TRUE),]
+
+teosinte_Ch02_decreasing_final <- teosinte_Chromosome_2[order(as.numeric(teosinte_Chromosome_2$Position), decreasing =TRUE),]
+
+teosinte_Ch03_decreasing_final <- teosinte_Chromosome_3[order(as.numeric(teosinte_Chromosome_3$Position), decreasing =TRUE),]
+
+teosinte_Ch04_decreasing_final <- teosinte_Chromosome_4[order(as.numeric(teosinte_Chromosome_4$Position), decreasing =TRUE),]
+
+teosinte_Ch05_decreasing_final <- teosinte_Chromosome_5[order(as.numeric(teosinte_Chromosome_5$Position), decreasing =TRUE),]
+
+teosinte_Ch06_decreasing_final <- teosinte_Chromosome_6[order(as.numeric(teosinte_Chromosome_6$Position), decreasing =TRUE),]
+
+teosinte_Ch07_decreasing_final <- teosinte_Chromosome_7[order(as.numeric(teosinte_Chromosome_7$Position), decreasing =TRUE),]
+
+teosinte_Ch08_decreasing_final <- teosinte_Chromosome_8[order(as.numeric(teosinte_Chromosome_8$Position), decreasing =TRUE),]
+
+teosinte_Ch09_decreasing_final <- teosinte_Chromosome_9[order(as.numeric(teosinte_Chromosome_9$Position), decreasing =TRUE),]
+
+teosinte_Ch10_decreasing_final <- teosinte_Chromosome_10[order(as.numeric(teosinte_Chromosome_10$Position), decreasing =TRUE),]
+
+#Replacing ? with -
+
+teosinte_Ch01_decreasing_final[teosinte_Ch01_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch02_decreasing_final[teosinte_Ch02_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch03_decreasing_final[teosinte_Ch03_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch04_decreasing_final[teosinte_Ch04_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch05_decreasing_final[teosinte_Ch05_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch06_decreasing_final[teosinte_Ch06_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch07_decreasing_final[teosinte_Ch07_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch08_decreasing_final[teosinte_Ch08_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch09_decreasing_final[teosinte_Ch09_decreasing_final == "?/?"] <- "-/-"
+
+teosinte_Ch10_decreasing_final[teosinte_Ch10_decreasing_final == "?/?"] <- "-/-"
+```
+
+#Writing tables for each file
+```{r}
+#Maize increasing and decreasing
+write.table(Maize_Ch01_increasing_final, file = "Maize_Ch01_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch02_increasing_final, file = "Maize_Ch02_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch03_increasing_final, file = "Maize_Ch03_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch04_increasing_final, file = "Maize_Ch04_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch05_increasing_final, file = "Maize_Ch05_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch06_increasing_final, file = "Maize_Ch06_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch07_increasing_final, file = "Maize_Ch07_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch08_increasing_final, file = "Maize_Ch08_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch09_increasing_final, file = "Maize_Ch09_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch10_increasing_final, file = "Maize_Ch10_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+
+write.table(Maize_Ch01_decreasing_final, file = "Maize_Ch01_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch02_decreasing_final, file = "Maize_Ch02_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch03_decreasing_final, file = "Maize_Ch03_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch04_decreasing_final, file = "Maize_Ch04_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch05_decreasing_final, file = "Maize_Ch05_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch06_decreasing_final, file = "Maize_Ch06_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch07_decreasing_final, file = "Maize_Ch07_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch08_decreasing_final, file = "Maize_Ch08_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch09_decreasing_final, file = "Maize_Ch09_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(Maize_Ch10_decreasing_final, file = "Maize_Ch10_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+
+#Teosinte increasing and decreasing
+write.table(teosinte_Ch01_increasing_final, file = "teosinte_Ch01_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch02_increasing_final, file = "teosinte_Ch02_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch03_increasing_final, file = "teosinte_Ch03_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch04_increasing_final, file = "teosinte_Ch04_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch05_increasing_final, file = "teosinte_Ch05_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch06_increasing_final, file = "teosinte_Ch06_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch07_increasing_final, file = "teosinte_Ch07_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch08_increasing_final, file = "teosinte_Ch08_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch09_increasing_final, file = "teosinte_Ch09_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch10_increasing_final, file = "teosinte_Ch10_increasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+
+write.table(teosinte_Ch01_decreasing_final, file = "teosinte_Ch01_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch02_decreasing_final, file = "teosinte_Ch02_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch03_decreasing_final, file = "teosinte_Ch03_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch04_decreasing_final, file = "teosinte_Ch04_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch05_decreasing_final, file = "teosinte_Ch05_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch06_decreasing_final, file = "teosinte_Ch06_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch07_decreasing_final, file = "teosinte_Ch07_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch08_decreasing_final, file = "teosinte_Ch08_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch09_decreasing_final, file = "teosinte_Ch09_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(teosinte_Ch10_decreasing_final, file = "teosinte_Ch10_decreasing_final", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+```
+
+There might be a better way to process the data into each file without writing everything else explicitly. That said, I tried using a for loop and what you did runs way faster, so maybe not! 
+
+#PART II, VISUALIZATION
+
+#SNPs per chromosome
+```{r}
+ggplot(combined_snp_genotype_data_maize, aes(x=Position, y=Chromosome)) + geom_point(col = "gold")
+
+ggplot(combined_snp_genotype_data_teosinte, aes(x=Position, y=Chromosome)) + geom_point(col = "darkgreen")
+#The graphs for Teosinte and Maize are the same, meaning that SNP position is unaffected by species
+```
+
+It looks like the x axis labels are overlapping on top of each other and making it so you can't see the position of each SNP. It could be that R is using the position as a character variable and so doesn't recognize position as a numeric scale. maybe try x=as.numeric(position) and see if that works better.
+
+#Missing data and amount of heterozygosity
+```{r}
+pivot_maize <- pivot_longer(combined_snp_genotype_data_maize, cols = !1:3, names_to = "Genes")
+pivot_maize$Genotype_Zygosity <- case_when(pivot_maize$value == "A/A" ~ "homozygous", pivot_maize$value == "C/C" ~ "homozygous", pivot_maize$value == "G/G" ~ "homozygous", pivot_maize$value == "T/T" ~ "homozygous", pivot_maize$value == "?/?" ~ "missing", .default = "heterozygous" )
+
+pivot_teosinte <- pivot_longer(combined_snp_genotype_data_teosinte, cols = !1:3, names_to = "Genes")
+pivot_teosinte$Genotype_Zygosity <- case_when(pivot_teosinte$value == "A/A" ~ "homozygous", pivot_teosinte$value == "C/C" ~ "homozygous", pivot_teosinte$value == "G/G" ~ "homozygous", pivot_teosinte$value == "T/T" ~ "homozygous", pivot_teosinte$value == "?/?" ~ "missing", .default = "heterozygous" )
+
+pivot_maize$species <- "maize"
+pivot_teosinte$species <- "teosinte"
+combined_pivot_table <- rbind(pivot_maize, pivot_teosinte)
+
+ggplot(data= combined_pivot_table) + geom_bar(mapping = aes(x = Chromosome, fill=Genotype_Zygosity), position = "fill") + facet_wrap(~species)
+```
+Nice job on this visualization, it is well organized and for the most part easy to read. I like your elegant use of pivot_longer and pivot tables. maybe try rotating the x axis labels by 90 degrees so multiple and unknown don't overlap the others. However, I'm not sure this answers the question posed. I interpreted this problem as comparing the zygosity proportions of each group (e.g. ZMMIL,ZMMLR,ZMMMR) and each sample (e.g. each Sample_ID from fang_et_al). I think you could use a similar visualization, but with the original fang_et_al data to achieve this.
+
+#Choose your own adventure
+```{r}
+#Mapping missing genetic data per chromosome and comparing between species
+combined_pivot_table_missing <- combined_pivot_table %>% filter(grepl("missing", Genotype_Zygosity))
+
+ggplot(data= combined_pivot_table_missing) + geom_bar(mapping = aes(x = Chromosome, fill=species), position = "dodge") + ggtitle("Comparison of Missing Data")
+ggplot(data = combined_pivot_table_missing) + geom_density(mapping = aes(x=Chromosome, fill=species), alpha=0.4) + ggtitle("Comparison of Missing Data")
+
+#Mapping homozygous genetic data per chromosome and comparing between species
+combined_pivot_table_homozygous <- combined_pivot_table %>% filter(grepl("homozygous", Genotype_Zygosity))
+
+ggplot(data= combined_pivot_table_homozygous) + geom_bar(mapping = aes(x = Chromosome, fill=species), position = "dodge") + ggtitle("Comparison of Homozygous Data")
+ggplot(data = combined_pivot_table_homozygous) + geom_density(mapping = aes(x=Chromosome, fill=species), alpha=0.4) + ggtitle("Comparison of Homozygous Data")
+
+#Mapping heterozygous genetic data per chromosome and comparing between species
+combined_pivot_table_heterozygous <- combined_pivot_table %>% filter(grepl("heterozygous", Genotype_Zygosity))
+
+ggplot(data= combined_pivot_table_heterozygous) + geom_bar(mapping = aes(x = Chromosome, fill=species), position = "dodge") + ggtitle("Comparison of Heterozygous Data")
+ggplot(data = combined_pivot_table_heterozygous) + geom_density(mapping = aes(x=Chromosome, fill=species), alpha=0.4) + ggtitle("Comparison of Heterozygous Data")
+```
+Nice choice of visualization and well executed. Again, maybe try angling or shortening the x axis labels so there is no overlap.
+
+Overall I think you did a great job. Your code is well documented and commented, and was easy to read and follow. If you plan to spend some additional time refining, I would add some more inspection steps and maybe put some more thought into the second visualization.
+
+

@@ -28,6 +28,9 @@ snp_position <- read.delim("https://github.com/EEOB-BioData/BCB546_Spring2023/ra
 dim(fang_et_al)
 dim(snp_position)
 #dimensions include number of columns and number of lines
+str(fang_et_al)
+str(snp_position)
+#shows structure of data frames, including column specifics (name, type, and preview of the data)
 ```
 
 #Extract Maize and Teosinte Data
